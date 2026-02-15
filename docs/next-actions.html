@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radilia HP制作 - ネクストアクション</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+  background: #f4f5f7;
+  color: #333;
+  line-height: 1.8;
+  padding: 40px 20px;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+h1 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.subtitle {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 32px;
+}
+.preview-link {
+  display: inline-block;
+  background: #333;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin-bottom: 32px;
+}
+.preview-link:hover { background: #555; }
+
+/* カテゴリ */
+.category {
+  margin-bottom: 28px;
+}
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.category-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.category-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+.category-desc {
+  font-size: 12px;
+  color: #888;
+}
+
+/* タスクカード */
+.task {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.task-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.task-checkbox.checked {
+  background: #4caf50;
+  border-color: #4caf50;
+}
+.task-checkbox.checked::after {
+  content: '✓';
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+.task.done .task-body { opacity: 0.4; }
+.task.done .task-title { text-decoration: line-through; }
+.task-body { flex: 1; }
+.task-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.task-detail {
+  font-size: 12px;
+  color: #777;
+  line-height: 1.6;
+}
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.badge-client { background: #fff3e0; color: #e65100; }
+.badge-internal { background: #e3f2fd; color: #1565c0; }
+.badge-confirm { background: #fce4ec; color: #c62828; }
+
+/* カテゴリカラー */
+.cat-red .category-icon { background: #fce4ec; color: #c62828; }
+.cat-blue .category-icon { background: #e3f2fd; color: #1565c0; }
+.cat-green .category-icon { background: #e8f5e9; color: #2e7d32; }
+.cat-orange .category-icon { background: #fff3e0; color: #e65100; }
+.cat-purple .category-icon { background: #f3e5f5; color: #7b1fa2; }
+
+/* 進捗バー */
+.progress-bar {
+  background: #e0e0e0;
+  border-radius: 10px;
+  height: 8px;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+.progress-fill {
+  background: linear-gradient(90deg, #4caf50, #66bb6a);
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s;
+}
+.progress-text {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 6px;
+  text-align: right;
+}
+
+/* フッター */
+.footer-note {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Radilia HP制作 - ネクストアクション</h1>
+  <p class="subtitle">作成日: 2026年2月16日 ｜ クライアント: Radilia株式会社</p>
+  <a class="preview-link" href="https://lenis-inc.github.io/b-assistant-radilia/index.html" target="_blank">現在のモックアップを確認 →</a>
+
+  <div class="progress-text">全体進捗: <strong id="progressLabel">0 / 0</strong></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+
+  <!-- ① クライアント確認（構成・方向性） -->
+  <div class="category cat-red">
+    <div class="category-header">
+      <div class="category-icon">①</div>
+      <div>
+        <div class="category-title">クライアント確認（構成・方向性）</div>
+        <div class="category-desc">モックアップを見ていただき、構成・内容の承認を得る</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">モックアップURL共有 <span class="badge badge-internal">社内</span></div>
+        <div class="task-detail">GitHub PagesのURLをクライアントに共有し、PC・スマホでの確認を依頼する<br>URL: https://lenis-inc.github.io/b-assistant-radilia/index.html</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">全体構成の確認 <span class="badge badge-confirm">要確認</span></div>
+        <div class="task-detail">LP形式（1ページ縦スクロール）のセクション順・内容に問題がないか確認。会社概要が別ページで良いかも再確認。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">キャッチコピー・テキスト内容の確認 <span class="badge badge-confirm">要確認</span></div>
+        <div class="task-detail">メインキャッチ「ずっと未完成なことを研究し続ける」、FAQ（9項目）、利用の流れ（5ステップ）等の文言がそのままで良いか確認。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">色味・デザイントーンの確認 <span class="badge badge-confirm">要確認</span></div>
+        <div class="task-detail">現在のシンプル・クリーン路線（白＋グレー）で問題ないか。ブランドカラーの希望があるか確認。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② クライアントからの素材・情報待ち -->
+  <div class="category cat-orange">
+    <div class="category-header">
+      <div class="category-icon">②</div>
+      <div>
+        <div class="category-title">クライアントからの素材・情報提供依頼</div>
+        <div class="category-desc">サイト完成に必要な素材・情報をクライアントにリクエストする</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">ロゴデータ <span class="badge badge-client">クライアント</span></div>
+        <div class="task-detail">ヘッダー・フッターに使用するロゴ画像を提供いただく。ヒアリングシートに「ロゴもある」との記載あり。PNG/SVG形式が望ましい。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">講師写真 <span class="badge badge-client">クライアント</span></div>
+        <div class="task-detail">柳瀨裕貴氏の写真を提供いただけるか確認。提供可の場合は高解像度の写真データをいただく。不可の場合はイラスト等で代替。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">受講料金 <span class="badge badge-client">クライアント</span></div>
+        <div class="task-detail">初級・中級・上級それぞれの料金を確定いただく。現在はダミー価格を表示中。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">カリキュラム詳細 <span class="badge badge-client">クライアント</span></div>
+        <div class="task-detail">初級（全8回）・中級（全6回）・上級（全8回）の各回テーマ・内容を確定いただく。現在は「詳細カリキュラムが入ります」と表示。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">代表挨拶の文面 <span class="badge badge-client">クライアント</span></div>
+        <div class="task-detail">会社概要ページ（company.html）の代表挨拶セクション。現在はダミーテキストを使用中。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">実績バッジの内容 <span class="badge badge-client">クライアント</span></div>
+        <div class="task-detail">ヒーローセクションの実績バッジ（例:「受講企業数○○社」「継続率○○%」等）の具体的な数値・内容を確認。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">「プランはMini〜で」の意味確認 <span class="badge badge-client">クライアント</span></div>
+        <div class="task-detail">ヒアリングシートに記載があるが意味が不明。料金プランの名称か、別の意図か確認が必要。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 制作作業（素材受領後） -->
+  <div class="category cat-blue">
+    <div class="category-header">
+      <div class="category-icon">③</div>
+      <div>
+        <div class="category-title">制作作業（素材受領後）</div>
+        <div class="category-desc">クライアントから素材・情報を受け取り次第、反映する</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">ロゴ画像の反映 <span class="badge badge-internal">社内</span></div>
+        <div class="task-detail">ヘッダー・フッターのテキスト「RADILIA」をロゴ画像に差し替え。全4ページに適用。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">講師写真の反映 <span class="badge badge-internal">社内</span></div>
+        <div class="task-detail">SVGプレースホルダーを実際の写真に差し替え。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">料金・カリキュラム・代表挨拶の反映 <span class="badge badge-internal">社内</span></div>
+        <div class="task-detail">ダミーテキスト箇所を確定した情報に差し替え。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">プライバシーポリシーの正式文面作成 <span class="badge badge-internal">社内</span></div>
+        <div class="task-detail">ダミーテキストを正式なプライバシーポリシーに差し替え。個人情報の取り扱い、利用目的、第三者提供等を記載。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ 技術対応 -->
+  <div class="category cat-green">
+    <div class="category-header">
+      <div class="category-icon">④</div>
+      <div>
+        <div class="category-title">技術対応（公開準備）</div>
+        <div class="category-desc">本番公開に向けた技術的な対応</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">フォーム送信先の実装 <span class="badge badge-internal">社内</span></div>
+        <div class="task-detail">お問い合わせフォームの送信先（バックエンド）を実装。選択肢: Googleフォーム連携 / Formspree / 自前API等。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">独自ドメインの設定（必要に応じて） <span class="badge badge-confirm">要確認</span></div>
+        <div class="task-detail">本番公開時に独自ドメイン（例: radilia-inc.com）を使用するか確認。使用する場合はDNS設定とGitHub Pages設定を行う。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">OGP / meta情報の設定 <span class="badge badge-internal">社内</span></div>
+        <div class="task-detail">各ページのtitle、description、OGP画像を設定。SNS共有時の見え方を最適化。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">Google Analytics等の計測タグ設置 <span class="badge badge-confirm">要確認</span></div>
+        <div class="task-detail">アクセス解析を導入するか確認。導入する場合はGA4等のタグを設置。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ 最終確認 -->
+  <div class="category cat-purple">
+    <div class="category-header">
+      <div class="category-icon">⑤</div>
+      <div>
+        <div class="category-title">最終確認・納品</div>
+        <div class="category-desc">全素材反映後の最終チェックと納品</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">クロスブラウザ・レスポンシブ最終確認 <span class="badge badge-internal">社内</span></div>
+        <div class="task-detail">PC（Chrome / Safari / Edge）、スマホ（iOS / Android）での表示確認。</div>
+      </div>
+    </div>
+
+    <div class="task" data-task>
+      <div class="task-checkbox" onclick="toggleTask(this)"></div>
+      <div class="task-body">
+        <div class="task-title">クライアント最終承認 <span class="badge badge-confirm">要確認</span></div>
+        <div class="task-detail">全修正完了後、クライアントに最終確認を依頼。承認を得て納品。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Radilia HP制作プロジェクト ｜ LENIS inc.<br>
+    リポジトリ: github.com/LENIS-inc/b-assistant-radilia
+  </div>
+</div>
+
+<script>
+var STORAGE_KEY = 'radilia-next-actions';
+
+function getState() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+  } catch(e) { return {}; }
+}
+
+function saveState() {
+  var state = {};
+  document.querySelectorAll('[data-task]').forEach(function(task, i) {
+    if (task.classList.contains('done')) state[i] = true;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function toggleTask(checkbox) {
+  checkbox.classList.toggle('checked');
+  checkbox.closest('.task').classList.toggle('done');
+  saveState();
+  updateProgress();
+}
+
+function updateProgress() {
+  var tasks = document.querySelectorAll('[data-task]');
+  var done = document.querySelectorAll('.task.done').length;
+  var total = tasks.length;
+  document.getElementById('progressLabel').textContent = done + ' / ' + total;
+  document.getElementById('progressFill').style.width = (total > 0 ? (done / total * 100) : 0) + '%';
+}
+
+// ページ読み込み時に保存済みの状態を復元
+(function() {
+  var state = getState();
+  document.querySelectorAll('[data-task]').forEach(function(task, i) {
+    if (state[i]) {
+      task.classList.add('done');
+      task.querySelector('.task-checkbox').classList.add('checked');
+    }
+  });
+  updateProgress();
+})();
+</script>
+</body>
+</html>
