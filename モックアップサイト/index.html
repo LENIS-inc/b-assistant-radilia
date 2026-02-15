@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radilia株式会社 | AI&DXオンライン講座</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background: #fff;
+      color: #333;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    a { color: #333; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; }
+
+    /* ========== Header ========== */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-logo {
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: 0.15em;
+      color: #222;
+    }
+    .header-logo:hover { text-decoration: none; }
+    .header-right { display: flex; align-items: center; gap: 28px; }
+    .nav-pc ul { list-style: none; display: flex; gap: 28px; }
+    .nav-pc a { font-size: 14px; font-weight: 500; color: #555; transition: color .2s; }
+    .nav-pc a:hover { color: #222; text-decoration: none; }
+    .header-cv {
+      display: inline-block;
+      padding: 9px 22px;
+      background: #333;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      border: none;
+      transition: background .2s;
+    }
+    .header-cv:hover { background: #555; text-decoration: none; color: #fff; }
+
+    /* hamburger (SP) */
+    .hamburger {
+      display: none;
+      width: 28px;
+      height: 20px;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .hamburger span { display: block; height: 2px; background: #333; transition: .3s; }
+
+    /* SP nav overlay */
+    .sp-nav {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,.97);
+      z-index: 200;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+    .sp-nav.open { display: flex; }
+    .sp-nav a { font-size: 1.1rem; font-weight: 500; }
+    .sp-nav-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #333;
+    }
+
+    /* ========== Sections ========== */
+    .section-white { background: #fff; }
+    .section-gray { background: #f6f6f6; }
+
+    /* ========== Hero ========== */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 24px 72px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+    .hero-catch {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 28px;
+      color: #222;
+    }
+    .hero-cv {
+      display: inline-block;
+      padding: 14px 40px;
+      background: #333;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: background .2s;
+    }
+    .hero-cv:hover { background: #555; text-decoration: none; color: #fff; }
+    .hero-right { position: relative; }
+    .hero-illust {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #e8e8e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+    .hero-badges { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; }
+    .hero-badges .badge {
+      padding: 8px 16px;
+      background: #eee;
+      font-size: 12px;
+      color: #666;
+      border-radius: 2px;
+    }
+
+    /* ========== Fixed CV (right side) ========== */
+    .fixed-cv {
+      position: fixed;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      z-index: 90;
+      padding: 16px 10px;
+      background: #333;
+      color: #fff;
+      font-size: 13px;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 0.1em;
+      transition: background .2s;
+    }
+    .fixed-cv:hover { background: #555; text-decoration: none; color: #fff; }
+
+    /* ========== Section common ========== */
+    .sec-inner { max-width: 1100px; margin: 0 auto; padding: 72px 24px; }
+    .sec-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #222;
+    }
+    .sec-subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+      letter-spacing: 0.15em;
+      margin-bottom: 8px;
+    }
+    .sec-lead {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 40px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ========== About ========== */
+    .about-text {
+      max-width: 780px;
+      margin: 0 auto 32px;
+      color: #555;
+      font-size: 15px;
+    }
+    .about-visual {
+      max-width: 800px;
+      margin: 0 auto 32px;
+      aspect-ratio: 16/9;
+      background: #eaeaea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      position: relative;
+    }
+    .about-visual-text {
+      padding: 32px;
+      text-align: center;
+      font-size: 15px;
+      color: #555;
+      line-height: 2;
+      font-weight: 500;
+    }
+    .about-text-2 {
+      max-width: 780px;
+      margin: 0 auto;
+      color: #555;
+      font-size: 15px;
+    }
+
+    /* ========== Problem / Solution ========== */
+    .worry-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .worry-solution-label {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    .worry-solution {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .worry-examples { list-style: none; }
+    .worry-examples li {
+      padding: 10px 0;
+      border-bottom: 1px solid #e8e8e8;
+      font-size: 14px;
+      color: #555;
+    }
+    .worry-examples li:last-child { border-bottom: none; }
+    .worry-illust {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #eaeaea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+
+    /* ========== Features ========== */
+    .feature-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 56px;
+    }
+    .feature-block:last-child { margin-bottom: 0; }
+    .feature-block.reverse .feature-img-wrap { order: 2; }
+    .feature-block.reverse .feature-text { order: 1; }
+    .feature-img-wrap {}
+    .feature-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #eaeaea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #aaa;
+      border-radius: 4px;
+    }
+    .feature-num {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #ddd;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .feature-text h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #222;
+    }
+    .feature-text p { font-size: 15px; color: #555; }
+
+    /* ========== CTA mid ========== */
+    .cta-mid {
+      text-align: center;
+      padding: 56px 24px;
+    }
+    .cta-mid-msg {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: 16px 52px;
+      background: #333;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: background .2s;
+    }
+    .cta-btn:hover { background: #555; text-decoration: none; color: #fff; }
+
+    /* ========== Curriculum ========== */
+    .curriculum-note {
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 40px;
+    }
+    .curriculum-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .curriculum-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .curriculum-card-header {
+      padding: 20px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .curriculum-card-header h3 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: #222;
+    }
+    .curriculum-card-header .meta {
+      font-size: 13px;
+      color: #777;
+    }
+    .curriculum-card-body {
+      padding: 20px;
+    }
+    .curriculum-card-body .goal {
+      font-size: 14px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 12px;
+    }
+    .curriculum-toggle {
+      width: 100%;
+      padding: 10px 16px;
+      border: 1px solid #ddd;
+      background: #fafafa;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: inherit;
+      color: #555;
+      transition: background .2s;
+    }
+    .curriculum-toggle:hover { background: #f0f0f0; }
+    .curriculum-toggle .arrow { transition: transform .2s; }
+    .curriculum-toggle.open .arrow { transform: rotate(180deg); }
+    .curriculum-detail {
+      display: none;
+      padding: 16px;
+      border: 1px solid #eee;
+      border-top: none;
+      font-size: 13px;
+      color: #666;
+    }
+    .curriculum-detail.open { display: block; }
+    .curriculum-detail ul { margin-left: 1.2em; }
+    .curriculum-detail li { margin-bottom: 4px; }
+
+    /* ========== Instructor ========== */
+    .instructor-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .instructor-photo {
+      width: 260px;
+      height: 320px;
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #999;
+      border-radius: 4px;
+    }
+    .instructor-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #222;
+    }
+    .instructor-bio { font-size: 15px; color: #555; }
+
+    /* ========== Price ========== */
+    .price-intro {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 36px;
+    }
+    .price-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .price-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .price-card-header {
+      padding: 18px 20px;
+      background: #f9f9f9;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .price-card-header h3 { font-size: 1.05rem; color: #222; }
+    .price-card-body { padding: 20px; }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .price-row:last-child { border-bottom: none; }
+    .price-total {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 2px solid #ddd;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+    }
+    .price-placeholder {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    /* ========== Flow ========== */
+    .flow-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .flow-item {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 0;
+      position: relative;
+      padding-bottom: 32px;
+    }
+    .flow-item:last-child { padding-bottom: 0; }
+    .flow-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 23px;
+      top: 48px;
+      bottom: 0;
+      width: 2px;
+      border-left: 2px dashed #d0d0d0;
+    }
+    .flow-num {
+      width: 48px;
+      height: 48px;
+      background: #333;
+      color: #fff;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 50%;
+    }
+    .flow-content { padding-top: 4px; }
+    .flow-content h3 { font-size: 1rem; margin-bottom: 6px; color: #222; }
+    .flow-content p { font-size: 14px; color: #666; }
+    .flow-notes {
+      max-width: 700px;
+      margin: 32px auto 0;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #777;
+    }
+    .flow-notes p { margin-bottom: 6px; }
+    .flow-notes p:last-child { margin-bottom: 0; }
+
+    /* ========== FAQ ========== */
+    .faq-list { max-width: 780px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .faq-q {
+      width: 100%;
+      padding: 18px 0;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .faq-q::before {
+      content: 'Q';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: #333;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .faq-q .faq-arrow {
+      margin-left: auto;
+      font-size: 12px;
+      color: #999;
+      transition: transform .2s;
+      flex-shrink: 0;
+    }
+    .faq-q.open .faq-arrow { transform: rotate(180deg); }
+    .faq-a {
+      display: none;
+      padding: 0 0 18px 40px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.8;
+    }
+    .faq-a.open { display: block; }
+
+    /* ========== Contact Form (LP embedded) ========== */
+    .contact-lead {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 36px;
+    }
+    .contact-form {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .form-group { margin-bottom: 24px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+    }
+    .tag-required {
+      display: inline-block;
+      background: #c00;
+      color: #fff;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 2px;
+      margin-left: 6px;
+      font-weight: 500;
+    }
+    .tag-optional {
+      display: inline-block;
+      background: #ccc;
+      color: #fff;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 2px;
+      margin-left: 6px;
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      font-size: 15px;
+      font-family: inherit;
+      background: #fff;
+      transition: border-color .2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #999;
+    }
+    .form-group textarea { min-height: 140px; resize: vertical; }
+    .form-group .radios {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+    }
+    .form-group .radios label {
+      display: inline-flex;
+      align-items: center;
+      font-weight: 400;
+      font-size: 15px;
+      cursor: pointer;
+      gap: 6px;
+    }
+    .form-group .radios input[type="radio"] { width: auto; }
+    .form-agree {
+      margin: 28px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .form-agree input { margin-top: 5px; width: auto; }
+    .form-agree label {
+      font-size: 14px;
+      font-weight: 400;
+      color: #555;
+      cursor: pointer;
+    }
+    .form-agree a { text-decoration: underline; color: #333; }
+    .form-submit {
+      display: block;
+      width: 100%;
+      max-width: 280px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      background: #333;
+      color: #fff;
+      border: none;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background .2s;
+    }
+    .form-submit:hover { background: #555; }
+
+    /* ========== Footer ========== */
+    .footer {
+      border-top: 1px solid #e0e0e0;
+      background: #fafafa;
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 24px 56px;
+    }
+    .footer-logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: #222;
+    }
+    .footer-info { font-size: 13px; color: #777; line-height: 1.8; }
+    .footer-info p { margin-bottom: 2px; }
+    .footer-links a { color: #555; font-size: 13px; }
+
+    /* ========== Responsive ========== */
+    @media (max-width: 768px) {
+      .nav-pc { display: none; }
+      .header-cv { display: none; }
+      .hamburger { display: flex; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 36px 24px 48px;
+        gap: 32px;
+      }
+      .hero-catch { font-size: 1.5rem; }
+      .hero-badges { justify-content: flex-start; }
+
+      .fixed-cv { padding: 12px 8px; font-size: 12px; }
+
+      .worry-grid { grid-template-columns: 1fr; }
+
+      .feature-block,
+      .feature-block.reverse {
+        grid-template-columns: 1fr;
+      }
+      .feature-block.reverse .feature-img-wrap { order: 0; }
+      .feature-block.reverse .feature-text { order: 0; }
+
+      .curriculum-cards { grid-template-columns: 1fr; }
+
+      .instructor-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .instructor-photo {
+        width: 200px;
+        height: 240px;
+        margin: 0 auto;
+      }
+
+      .price-cards { grid-template-columns: 1fr; }
+
+      .sec-inner { padding: 48px 20px; }
+      .sec-title { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body id="top">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="header-logo">RADILIA</a>
+      <div class="header-right">
+        <nav class="nav-pc">
+          <ul>
+            <li><a href="index.html">TOP</a></li>
+            <li><a href="company.html">会社概要</a></li>
+          </ul>
+        </nav>
+        <button class="hamburger" aria-label="メニュー" onclick="document.querySelector('.sp-nav').classList.add('open')">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SP Nav -->
+  <div class="sp-nav">
+    <button class="sp-nav-close" onclick="this.parentElement.classList.remove('open')">&times;</button>
+    <a href="#top" onclick="this.parentElement.classList.remove('open')">TOP</a>
+    <a href="company.html">会社概要</a>
+    <a href="#contact" onclick="this.parentElement.classList.remove('open')">お問い合わせ</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+  </div>
+
+  <!-- Fixed CV -->
+  <a href="#contact" class="fixed-cv">お問い合わせ</a>
+
+  <main>
+    <!-- ===== Hero ===== -->
+    <section class="section-white">
+      <div class="hero">
+        <div>
+          <p class="hero-sub">構造的な理解が意欲と創造力を育み、再現性を生む。</p>
+          <h1 class="hero-catch">ずっと未完成なことを<br>研究し続ける</h1>
+          <a href="#contact" class="hero-cv">お問い合わせはこちら</a>
+        </div>
+        <div class="hero-right">
+          <div class="hero-illust">
+            <svg viewBox="0 0 480 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+              <!-- Background elements -->
+              <rect x="40" y="60" width="400" height="240" rx="16" fill="#f0f0f0"/>
+              <!-- Laptop -->
+              <rect x="140" y="100" width="200" height="130" rx="8" fill="#fff" stroke="#ccc" stroke-width="2"/>
+              <rect x="152" y="112" width="176" height="100" rx="4" fill="#e8e8e8"/>
+              <!-- Screen content - growth chart -->
+              <polyline points="168,192 198,175 228,180 258,155 288,145 318,120" stroke="#888" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="318" cy="120" r="5" fill="#888"/>
+              <!-- Arrow up -->
+              <path d="M310 128 L318 112 L326 128" stroke="#aaa" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <!-- Laptop base -->
+              <path d="M120 230 L140 230 L145 245 L335 245 L340 230 L360 230 L350 250 L130 250 Z" fill="#ddd"/>
+              <!-- People icons -->
+              <circle cx="90" cy="180" r="18" fill="#ddd"/>
+              <rect x="74" y="204" width="32" height="40" rx="8" fill="#ddd"/>
+              <circle cx="390" cy="160" r="18" fill="#ddd"/>
+              <rect x="374" y="184" width="32" height="40" rx="8" fill="#ddd"/>
+              <circle cx="400" cy="240" r="12" fill="#e0e0e0"/>
+              <circle cx="80" cy="260" r="12" fill="#e0e0e0"/>
+              <!-- Connection dots -->
+              <circle cx="120" cy="150" r="4" fill="#ccc"/>
+              <circle cx="360" cy="140" r="4" fill="#ccc"/>
+              <line x1="108" y1="180" x2="140" y2="165" stroke="#ddd" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <line x1="340" y1="165" x2="372" y2="160" stroke="#ddd" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <!-- Decorative circles -->
+              <circle cx="60" cy="90" r="6" fill="none" stroke="#ddd" stroke-width="1.5"/>
+              <circle cx="420" cy="80" r="8" fill="none" stroke="#ddd" stroke-width="1.5"/>
+              <circle cx="440" cy="280" r="5" fill="none" stroke="#ddd" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="hero-badges">
+            <span class="badge">実績</span>
+            <span class="badge">実績</span>
+            <span class="badge">実績</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== AI&DXオンライン講座とは？ ===== -->
+    <section class="section-gray">
+      <div class="sec-inner">
+        <p class="sec-subtitle">About</p>
+        <h2 class="sec-title">AI&DXオンライン講座とは？</h2>
+        <p class="about-text">「AI&DXオンライン講座」は、営業テクニックの詰め込みではなく、営業や組織づくりの〈構造〉を理解し、再現できる力に変えていく講座です。eラーニングではなく、リアルタイムの双方向講座に限定。受講者からは「頭が整理された」「全然知らなかった」という声とともに、「部下の育成プログラムの改善ができる」「トークスクリプトを再構築したい」など、実務に直結した気づきを自ら話してくださる方が多くいらっしゃいます。</p>
+        <div class="about-visual" style="flex-direction:column;gap:0;">
+          <svg viewBox="0 0 800 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;">
+            <!-- Structure/Framework illustration -->
+            <!-- Base blocks -->
+            <rect x="100" y="200" width="600" height="40" rx="6" fill="#ddd"/>
+            <rect x="160" y="150" width="200" height="40" rx="6" fill="#d5d5d5"/>
+            <rect x="440" y="150" width="200" height="40" rx="6" fill="#d5d5d5"/>
+            <rect x="280" y="100" width="240" height="40" rx="6" fill="#ccc"/>
+            <rect x="340" y="50" width="120" height="40" rx="6" fill="#bbb"/>
+            <!-- Connecting lines -->
+            <line x1="260" y1="170" x2="400" y2="140" stroke="#c0c0c0" stroke-width="1.5"/>
+            <line x1="540" y1="170" x2="400" y2="140" stroke="#c0c0c0" stroke-width="1.5"/>
+            <line x1="400" y1="100" x2="400" y2="90" stroke="#c0c0c0" stroke-width="1.5"/>
+            <!-- Person on top -->
+            <circle cx="400" cy="30" r="12" fill="#aaa"/>
+            <!-- Labels -->
+            <text x="260" y="225" font-size="13" fill="#999" font-family="sans-serif" text-anchor="middle">構造</text>
+            <text x="540" y="225" font-size="13" fill="#999" font-family="sans-serif" text-anchor="middle">理解</text>
+            <text x="400" y="125" font-size="13" fill="#999" font-family="sans-serif" text-anchor="middle">再現</text>
+            <text x="400" y="75" font-size="12" fill="#999" font-family="sans-serif" text-anchor="middle">成長</text>
+          </svg>
+          <p class="about-visual-text" style="margin-top:16px;">成長や成果は「才能」だけで決まるものではありません。<br>構造を理解し、型を身につけ、<br>現場で再現できる力を一緒に育てます。</p>
+        </div>
+        <p class="about-text-2">いわゆる営業ノウハウに全振りした内容ではないため、最初は疑心暗鬼になる方も少なくありません。それでも、本当に届けたい方に届けたい思いから、リアルタイムでの講座のみにこだわっています。感覚を言語化し、社内で再現可能なナレッジに落とし込む――その一歩を、本講座でお手伝いします。</p>
+      </div>
+    </section>
+
+    <!-- ===== 問題提起・解決提示 ===== -->
+    <section class="section-white">
+      <div class="sec-inner">
+        <h2 class="sec-title">成長する人は真似のできない<br>『才能』なのでしょうか？</h2>
+        <div style="height: 40px;"></div>
+        <div class="worry-grid">
+          <div>
+            <p class="worry-solution-label">解決提示</p>
+            <p class="worry-solution">営業以外での場面でも活きる成長に繋がる</p>
+            <ul class="worry-examples">
+              <li>例① 営業が人によって異なり組織としての質のムラが大きい</li>
+              <li>例② 現場から意見や案が出てこない</li>
+              <li>例③ 上司によって言うことが違う上司ガチャ状態</li>
+            </ul>
+          </div>
+          <div class="worry-illust">
+            <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+              <!-- Person thinking/confused -->
+              <circle cx="200" cy="100" r="35" fill="#ddd"/>
+              <rect x="175" y="140" width="50" height="60" rx="12" fill="#ddd"/>
+              <!-- Question marks -->
+              <text x="130" y="70" font-size="28" fill="#ccc" font-family="sans-serif" font-weight="700">?</text>
+              <text x="260" y="60" font-size="22" fill="#d5d5d5" font-family="sans-serif" font-weight="700">?</text>
+              <text x="280" y="100" font-size="18" fill="#e0e0e0" font-family="sans-serif" font-weight="700">?</text>
+              <!-- Arrow down to structure -->
+              <path d="M200 210 L200 230" stroke="#bbb" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M192 224 L200 234 L208 224" stroke="#bbb" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Structure blocks at bottom -->
+              <rect x="80" y="245" width="80" height="30" rx="4" fill="#d0d0d0"/>
+              <rect x="170" y="245" width="60" height="30" rx="4" fill="#c8c8c8"/>
+              <rect x="240" y="245" width="80" height="30" rx="4" fill="#d0d0d0"/>
+              <!-- Lightbulb -->
+              <circle cx="320" cy="180" r="16" fill="none" stroke="#ccc" stroke-width="2"/>
+              <line x1="320" y1="196" x2="320" y2="202" stroke="#ccc" stroke-width="2" stroke-linecap="round"/>
+              <path d="M312 172 L320 164 L328 172" stroke="#ccc" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Small decorative -->
+              <circle cx="80" cy="80" r="4" fill="#e0e0e0"/>
+              <circle cx="340" cy="60" r="6" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 講座の特徴（3つ）===== -->
+    <section class="section-gray">
+      <div class="sec-inner">
+        <p class="sec-subtitle">Features</p>
+        <h2 class="sec-title">AI&DXオンライン講座の特徴</h2>
+        <div style="height: 24px;"></div>
+
+        <div class="feature-block">
+          <div class="feature-img-wrap">
+            <div class="feature-img">
+              <svg viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+                <!-- Brain/thinking structure -->
+                <circle cx="160" cy="100" r="60" fill="none" stroke="#ccc" stroke-width="2"/>
+                <!-- Inner network -->
+                <circle cx="140" cy="85" r="8" fill="#d5d5d5"/>
+                <circle cx="175" cy="80" r="8" fill="#d5d5d5"/>
+                <circle cx="155" cy="110" r="8" fill="#d5d5d5"/>
+                <circle cx="180" cy="108" r="8" fill="#d5d5d5"/>
+                <circle cx="145" cy="130" r="6" fill="#ddd"/>
+                <circle cx="175" cy="128" r="6" fill="#ddd"/>
+                <line x1="140" y1="85" x2="175" y2="80" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="140" y1="85" x2="155" y2="110" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="175" y1="80" x2="180" y2="108" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="155" y1="110" x2="180" y2="108" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="155" y1="110" x2="145" y2="130" stroke="#ccc" stroke-width="1"/>
+                <line x1="180" y1="108" x2="175" y2="128" stroke="#ccc" stroke-width="1"/>
+                <!-- Arrows pointing outward (multiple applications) -->
+                <line x1="220" y1="80" x2="260" y2="60" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="220" y1="100" x2="270" y2="100" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="220" y1="120" x2="260" y2="140" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="268" cy="56" r="12" fill="#e8e8e8"/>
+                <circle cx="278" cy="100" r="12" fill="#e8e8e8"/>
+                <circle cx="268" cy="144" r="12" fill="#e8e8e8"/>
+                <!-- Label -->
+                <text x="160" y="195" font-size="11" fill="#aaa" font-family="sans-serif" text-anchor="middle">構造的思考</text>
+              </svg>
+            </div>
+          </div>
+          <div class="feature-text">
+            <p class="feature-num">01</p>
+            <h3>営業テクニックに全振りしていない</h3>
+            <p>いわゆる営業テクニックに全振りした内容ではないから最初は疑心暗鬼な方が多いのも事実。しかし本講座は、営業を含めたあらゆる場面で活きる「構造的な思考力」を養うことを目的としています。</p>
+          </div>
+        </div>
+
+        <div class="feature-block reverse">
+          <div class="feature-img-wrap">
+            <div class="feature-img">
+              <svg viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+                <!-- Monitor/screen -->
+                <rect x="60" y="40" width="200" height="130" rx="8" fill="#fff" stroke="#ccc" stroke-width="2"/>
+                <rect x="72" y="52" width="176" height="96" rx="4" fill="#f0f0f0"/>
+                <!-- Instructor on screen -->
+                <circle cx="160" cy="85" r="18" fill="#d0d0d0"/>
+                <rect x="145" y="108" width="30" height="28" rx="6" fill="#d0d0d0"/>
+                <!-- Screen base -->
+                <rect x="140" y="170" width="40" height="8" rx="2" fill="#ddd"/>
+                <rect x="120" y="178" width="80" height="6" rx="3" fill="#ddd"/>
+                <!-- Speech/interaction lines -->
+                <line x1="210" y1="72" x2="236" y2="72" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="210" y1="82" x2="228" y2="82" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="210" y1="92" x2="232" y2="92" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Live indicator -->
+                <circle cx="82" cy="62" r="4" fill="#bbb"/>
+                <text x="92" y="66" font-size="10" fill="#aaa" font-family="sans-serif">LIVE</text>
+                <!-- Participants below -->
+                <circle cx="90" cy="210" r="12" fill="#ddd"/>
+                <circle cx="130" cy="210" r="12" fill="#ddd"/>
+                <circle cx="170" cy="210" r="12" fill="#ddd"/>
+                <circle cx="210" cy="210" r="12" fill="#ddd"/>
+                <!-- Bidirectional arrows -->
+                <path d="M125 195 L140 188" stroke="#ccc" stroke-width="1" stroke-linecap="round"/>
+                <path d="M175 195 L168 188" stroke="#ccc" stroke-width="1" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="feature-text">
+            <p class="feature-num">02</p>
+            <h3>リアルタイム講座に限定</h3>
+            <p>実際に受講している方にしっかりと届けたい思いからeラーニング形式をとらず、リアルタイムでの講座にのみ限定しています。今や少し古臭いやり方とも言えますが、受講者からは「頭が整理された」「全然知らなかった」という声をいただいています。</p>
+          </div>
+        </div>
+
+        <div class="feature-block">
+          <div class="feature-img-wrap">
+            <div class="feature-img">
+              <svg viewBox="0 0 320 240" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+                <!-- Speech bubbles with quotes -->
+                <rect x="40" y="30" width="160" height="50" rx="8" fill="#e8e8e8"/>
+                <polygon points="80,80 70,92 95,80" fill="#e8e8e8"/>
+                <line x1="58" y1="48" x2="170" y2="48" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="58" y1="60" x2="140" y2="60" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Second bubble -->
+                <rect x="120" y="100" width="160" height="50" rx="8" fill="#e0e0e0"/>
+                <polygon points="240,150 250,162 225,150" fill="#e0e0e0"/>
+                <line x1="138" y1="118" x2="250" y2="118" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="138" y1="130" x2="220" y2="130" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Third bubble -->
+                <rect x="60" y="170" width="180" height="44" rx="8" fill="#e8e8e8"/>
+                <polygon points="120,214 110,226 135,214" fill="#e8e8e8"/>
+                <line x1="78" y1="186" x2="210" y2="186" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="78" y1="198" x2="180" y2="198" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Person icons -->
+                <circle cx="60" cy="105" r="10" fill="#d0d0d0"/>
+                <circle cx="260" cy="175" r="10" fill="#d0d0d0"/>
+                <circle cx="100" cy="238" r="10" fill="#d0d0d0"/>
+                <!-- Upward trend arrow -->
+                <path d="M270 70 L285 40" stroke="#bbb" stroke-width="2" stroke-linecap="round"/>
+                <path d="M278 44 L285 38 L290 50" stroke="#bbb" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="feature-text">
+            <p class="feature-num">03</p>
+            <h3>実務に直結した声が続々</h3>
+            <p>「部下の育成プログラムの改善ができる」「トークスクリプトを再構築したい」など実務に直結した意見を自ら話してくれる方が多いです。受講者自身が気づきを得て、行動に移していく姿が本講座の特徴です。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 中間CTA ===== -->
+    <section class="section-white">
+      <div class="cta-mid">
+        <p class="cta-mid-msg">まずはお気軽にご相談ください</p>
+        <a href="#contact" class="cta-btn">お問い合わせはこちら</a>
+      </div>
+    </section>
+
+    <!-- ===== カリキュラム ===== -->
+    <section class="section-gray">
+      <div class="sec-inner">
+        <p class="sec-subtitle">Curriculum</p>
+        <h2 class="sec-title">オンライン講座のカリキュラム</h2>
+        <p class="curriculum-note">※講座の構成はＡ回（解釈編）とＢ回（学術編）を交互に行い、体感と構造理解を深めるように構成しています。</p>
+
+        <div class="curriculum-cards">
+          <!-- 初級 -->
+          <div class="curriculum-card">
+            <div class="curriculum-card-header">
+              <h3>初級</h3>
+              <p class="meta">全8回（各回1.5h＋質疑応答0.5h）</p>
+            </div>
+            <div class="curriculum-card-body">
+              <p class="goal">型を理解し再現できるプレイヤーへ</p>
+              <button type="button" class="curriculum-toggle" data-target="cur-1">
+                <span>詳細を見る</span>
+                <span class="arrow">▼</span>
+              </button>
+              <div class="curriculum-detail" id="cur-1">
+                <ul>
+                  <li>詳細カリキュラムが入ります</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 中級 -->
+          <div class="curriculum-card">
+            <div class="curriculum-card-header">
+              <h3>中級</h3>
+              <p class="meta">全6回</p>
+            </div>
+            <div class="curriculum-card-body">
+              <p class="goal">顧客への提案・伴走ができるパートナーへ</p>
+              <button type="button" class="curriculum-toggle" data-target="cur-2">
+                <span>詳細を見る</span>
+                <span class="arrow">▼</span>
+              </button>
+              <div class="curriculum-detail" id="cur-2">
+                <ul>
+                  <li>詳細カリキュラムが入ります</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 上級 -->
+          <div class="curriculum-card">
+            <div class="curriculum-card-header">
+              <h3>上級</h3>
+              <p class="meta">全8回</p>
+            </div>
+            <div class="curriculum-card-body">
+              <p class="goal">社員育成〜事業部拡大を担うマネージャーへ</p>
+              <button type="button" class="curriculum-toggle" data-target="cur-3">
+                <span>詳細を見る</span>
+                <span class="arrow">▼</span>
+              </button>
+              <div class="curriculum-detail" id="cur-3">
+                <ul>
+                  <li>詳細カリキュラムが入ります</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 講師紹介 ===== -->
+    <section class="section-white">
+      <div class="sec-inner">
+        <p class="sec-subtitle">Instructor</p>
+        <h2 class="sec-title">講師紹介</h2>
+        <div style="height: 24px;"></div>
+        <div class="instructor-grid">
+          <div class="instructor-photo">
+            <svg viewBox="0 0 260 320" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+              <!-- Person silhouette -->
+              <rect width="260" height="320" rx="4" fill="#e0e0e0"/>
+              <circle cx="130" cy="120" r="45" fill="#ccc"/>
+              <ellipse cx="130" cy="240" rx="60" ry="70" fill="#ccc"/>
+              <!-- Camera icon -->
+              <rect x="108" y="280" width="44" height="28" rx="4" fill="none" stroke="#bbb" stroke-width="2"/>
+              <circle cx="130" cy="292" r="8" fill="none" stroke="#bbb" stroke-width="2"/>
+              <rect x="120" y="276" width="20" height="6" rx="2" fill="none" stroke="#bbb" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div>
+            <p class="instructor-name">柳瀨 裕貴</p>
+            <p class="instructor-bio">麻布高校卒業。大学時代に塾講師に没頭し、大学中退と共に塾運営からスタート。その後、複数の営業会社や税理士事務所を経て独立。</p>
+            <br>
+            <p class="instructor-bio">上場企業の３カ月間の社員研修が３年以上継続中など、社員育成やメンターとして営業の育成や社員のモチベーションアップ、業績改善で定評がある。誰にでも分かるような言語化と構造的な理解の促進が好評で、感覚値を説明可能な社内ナレッジに落とし込む、現場からの創造的な意見創出などで顧客満足度が高い。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 受講料金 ===== -->
+    <section class="section-gray">
+      <div class="sec-inner">
+        <p class="sec-subtitle">Price</p>
+        <h2 class="sec-title">受講料金</h2>
+        <p class="price-intro">料金の詳細はお問い合わせください。</p>
+
+        <div class="price-cards">
+          <div class="price-card">
+            <div class="price-card-header"><h3>初級</h3></div>
+            <div class="price-card-body">
+              <div class="price-row"><span>○○料金</span><span>¥00,000</span></div>
+              <div class="price-row"><span>○○料金</span><span>¥00,000</span></div>
+              <div class="price-total"><span>合計</span><span>¥00,000</span></div>
+            </div>
+          </div>
+          <div class="price-card">
+            <div class="price-card-header"><h3>中級</h3></div>
+            <div class="price-card-body">
+              <div class="price-placeholder">内容が入ります</div>
+            </div>
+          </div>
+          <div class="price-card">
+            <div class="price-card-header"><h3>上級</h3></div>
+            <div class="price-card-body">
+              <div class="price-placeholder">内容が入ります</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ご利用の流れ ===== -->
+    <section class="section-white">
+      <div class="sec-inner">
+        <p class="sec-subtitle">Flow</p>
+        <h2 class="sec-title">ご利用の流れ</h2>
+        <div style="height: 24px;"></div>
+
+        <div class="flow-list">
+          <div class="flow-item">
+            <div class="flow-num">01</div>
+            <div class="flow-content">
+              <h3>お問い合わせ・事前相談</h3>
+              <p>お問い合わせフォームよりご連絡ください。内容を確認のうえ、オンラインにて30〜60分程度の事前面談を実施します。</p>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-num">02</div>
+            <div class="flow-content">
+              <h3>講座内容・受講条件の確認</h3>
+              <p>面談にて、講座内容・受講対象者・助成金活用の可否（条件確認）・開始時期・講座間隔などをすり合わせます。</p>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-num">03</div>
+            <div class="flow-content">
+              <h3>受講スケジュール確定・お申込み</h3>
+              <p>内容にご納得いただけましたら、受講対象者を確定し、スケジュールを決定します。</p>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-num">04</div>
+            <div class="flow-content">
+              <h3>講座スタート（オンライン）</h3>
+              <p>確定したスケジュールにて、オンライン講座を開始します。</p>
+            </div>
+          </div>
+          <div class="flow-item">
+            <div class="flow-num">05</div>
+            <div class="flow-content">
+              <h3>受講完了・助成金申請（お客様対応）</h3>
+              <p>講座終了後、助成金の申請手続きを行っていただきます。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-notes">
+          <p>※助成金の申請手続きは弊社では行っておりません。</p>
+          <p>※助成金の支給可否・支給時期については、各制度・行政の判断となります。</p>
+          <p>※お問い合わせ後、必ず事前面談を実施させていただいております。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== よくあるご質問（9項目・アコーディオン）===== -->
+    <section class="section-gray">
+      <div class="sec-inner">
+        <p class="sec-subtitle">FAQ</p>
+        <h2 class="sec-title">よくあるご質問</h2>
+        <div style="height: 16px;"></div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-q" type="button">個人での受講は可能ですか？<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">はい、個人の方も受講可能です。</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" type="button">受講人数の途中変更は可能ですか？<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">可能です。ただし、人数が減少する場合はスケジュールや費用に影響する可能性があるため、事前にご相談ください。</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" type="button">割引は可能ですか？<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">本講座は一律価格での機械的な受注ではなく、必ず事前面談を実施しております。企業様・個人様それぞれの状況を踏まえ、無理のないご受講いただける方法を面談時にご相談させていただきます。</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" type="button">助成金は必ず受給できますか？<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">助成金の受給可否は、各制度および行政の判断となります。弊社では支給保証は行っておりません。</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" type="button">助成金の申請サポートはありますか？<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">申請代行は行っておりません。必要に応じて、社労士などの専門家へご相談ください。</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" type="button">支払い方法を教えてください。<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">お支払い方法の詳細については、事前面談時にご案内いたします。</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" type="button">キャンセルや返金は可能ですか？<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">キャンセル・返金の可否や条件については、受講内容や進行状況により異なるため、事前面談時にご説明いたします。</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" type="button">録画視聴は可能ですか？<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">講座の形式により異なります。詳細は事前面談にてご案内いたします。</div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" type="button">ITや専門知識がなくても受講できますか？<span class="faq-arrow">▼</span></button>
+            <div class="faq-a">はい、特別な専門知識がなくても受講いただける内容を想定しています。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== お問い合わせフォーム（LP内埋め込み）===== -->
+    <section class="section-white" id="contact">
+      <div class="sec-inner">
+        <p class="sec-subtitle">Contact</p>
+        <h2 class="sec-title">お問い合わせ</h2>
+        <p class="contact-lead">以下の項目をご記入のうえ、送信してください。</p>
+
+        <form class="contact-form">
+          <div class="form-group">
+            <label>会社名<span class="tag-optional">任意</span></label>
+            <input type="text" name="company" placeholder="例）株式会社○○">
+          </div>
+          <div class="form-group">
+            <label>お名前<span class="tag-required">必須</span></label>
+            <input type="text" name="name" placeholder="例）山田 太郎" required>
+          </div>
+          <div class="form-group">
+            <label>フリガナ<span class="tag-required">必須</span></label>
+            <input type="text" name="furigana" placeholder="例）ヤマダ タロウ" required>
+          </div>
+          <div class="form-group">
+            <label>電話番号<span class="tag-required">必須</span></label>
+            <input type="tel" name="tel" placeholder="例）090-1234-5678" required>
+          </div>
+          <div class="form-group">
+            <label>受講コース<span class="tag-required">必須</span></label>
+            <div class="radios">
+              <label><input type="radio" name="course" value="beginner" required> 初級</label>
+              <label><input type="radio" name="course" value="intermediate"> 中級</label>
+              <label><input type="radio" name="course" value="advanced"> 上級</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>メールアドレス<span class="tag-required">必須</span></label>
+            <input type="email" name="email" placeholder="例）example@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>メールアドレス（確認）<span class="tag-required">必須</span></label>
+            <input type="email" name="email_confirm" placeholder="確認のため再入力してください" required>
+          </div>
+          <div class="form-group">
+            <label>お問い合わせ内容</label>
+            <textarea name="body" placeholder="ご質問やご相談がありましたらご記入ください。"></textarea>
+          </div>
+          <div class="form-agree">
+            <input type="checkbox" name="agree" id="agree-lp" required>
+            <label for="agree-lp"><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意する</label>
+          </div>
+          <button type="button" class="form-submit">送信する</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">RADILIA</div>
+      <div class="footer-info">
+        <p>Radilia株式会社</p>
+        <p>〒242-0001 神奈川県大和市南林間5-7-15</p>
+        <p>TEL: 090-3316-9481</p>
+        <p>営業時間: 10:00-19:00</p>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html">プライバシーポリシー</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Curriculum accordion
+    document.querySelectorAll('.curriculum-toggle').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var id = this.getAttribute('data-target');
+        var detail = document.getElementById(id);
+        var isOpen = detail.classList.contains('open');
+        detail.classList.toggle('open');
+        this.classList.toggle('open');
+        this.querySelector('span:first-child').textContent = isOpen ? '詳細を見る' : '閉じる';
+      });
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-q').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var answer = this.nextElementSibling;
+        var isOpen = answer.classList.contains('open');
+        answer.classList.toggle('open');
+        this.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>
