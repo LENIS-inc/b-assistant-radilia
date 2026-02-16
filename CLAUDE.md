@@ -241,6 +241,16 @@ AI&DXオンライン講座を主軸としたサービスサイトを構築する
 - セクション間余白: 72px（PC）/ 48px（SP）
 - イラスト: インラインSVG（グレー系トーン、#ccc〜#e8e8e8）
 
+## ネクストアクション チェックリスト同期（GAS連携）
+
+- **ページ**: `docs/next-actions.html` — プロジェクト進捗チェックリスト
+- **仕組み**: チェック状態を Google スプレッドシート + Google Apps Script で永続化し、クロスデバイス同期を実現
+- **GASコード**: `gas-code.js`（スプレッドシートの Apps Script に貼り付け済み）
+- **スプレッドシート**: 【柳瀬様】ヒアリングシートの `checklist` タブ（A列=タスクインデックス, B列=完了状態）
+- **GAS Web App URL**: `https://script.google.com/macros/s/AKfycbyidEEnQMbTJo-kjYCiJksnhWtOZMNo87UqeJfJs3cLJXuAfmT2VACWFFd7b7OzUZd4/exec`
+- **フォールバック**: GAS未設定時・オフライン時は localStorage で動作
+- **GASコード変更時の注意**: コード変更後は Apps Script エディタで「デプロイ」→「デプロイを管理」→ 鉛筆アイコン → バージョンを「新しいバージョン」に変更 → デプロイ が必要
+
 ## 未確定・残タスク
 
 - 料金は未確定（ダミー表示）
