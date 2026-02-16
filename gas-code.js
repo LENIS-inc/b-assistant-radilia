@@ -16,7 +16,7 @@
  *
  * 【スプレッドシートの構成】（自動で作成されます）
  *   A列: taskIndex（タスクの番号 0,1,2,...）
- *   B列: done（完了状態 TRUE/FALSE）
+ *   B列: done（完了状態 TRUE/FALSE/DELETE）
  */
 
 // ---------- 設定 ----------
@@ -28,7 +28,11 @@ function getSheet() {
 }
 
 /**
- * スプレッドシートから全タスク状態を { "0": true, "3": true, ... } 形式で返す
+ * スプレッドシートから全タスク状態を返す
+ * { "0": true, "3": true, "5": "DELETE", ... }
+ * - true: 完了
+ * - "DELETE": 不要
+ * - 未完了のタスクは含まない
  */
 function getAllStates() {
   var sheet = getSheet();
@@ -39,8 +43,10 @@ function getAllStates() {
   var data = sheet.getRange(1, 1, lastRow, 2).getValues();
   for (var i = 0; i < data.length; i++) {
     var idx = String(data[i][0]);
-    var done = data[i][1] === true || data[i][1] === 'TRUE';
-    if (done) {
+    var val = data[i][1];
+    if (val === 'DELETE') {
+      states[idx] = 'DELETE';
+    } else if (val === true || val === 'TRUE') {
       states[idx] = true;
     }
   }
@@ -59,12 +65,19 @@ function doGet(e) {
 
 /**
  * POST リクエスト: タスク状態を更新する
- * リクエストボディ: { "taskIndex": 0, "done": true }
+ * リクエストボディ: { "taskIndex": 0, "done": true / false / "DELETE" }
  */
 function doPost(e) {
   var body = JSON.parse(e.postData.contents);
   var taskIndex = String(body.taskIndex);
-  var done = body.done === true;
+  // done: true(完了) / false(未完了) / "DELETE"(不要)
+  var done = body.done;
+  var cellValue;
+  if (done === 'DELETE') {
+    cellValue = 'DELETE';
+  } else {
+    cellValue = (done === true);
+  }
 
   var sheet = getSheet();
   var lastRow = sheet.getLastRow();
@@ -75,7 +88,7 @@ function doPost(e) {
     var indices = sheet.getRange(1, 1, lastRow, 1).getValues();
     for (var i = 0; i < indices.length; i++) {
       if (String(indices[i][0]) === taskIndex) {
-        sheet.getRange(i + 1, 2).setValue(done);
+        sheet.getRange(i + 1, 2).setValue(cellValue);
         found = true;
         break;
       }
@@ -84,7 +97,7 @@ function doPost(e) {
 
   // 見つからなければ新しい行を追加
   if (!found) {
-    sheet.appendRow([parseInt(taskIndex, 10), done]);
+    sheet.appendRow([parseInt(taskIndex, 10), cellValue]);
   }
 
   return ContentService

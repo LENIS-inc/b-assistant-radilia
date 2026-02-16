@@ -155,6 +155,46 @@ h1 {
   text-align: right;
 }
 
+/* 不要状態 */
+.task.deleted { opacity: 0.35; }
+.task.deleted .task-title {
+  text-decoration: line-through;
+  text-decoration-color: #c62828;
+}
+.task.deleted .task-checkbox { pointer-events: none; opacity: 0.3; }
+.deleted-badge {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 8px;
+  vertical-align: middle;
+  background: #fce4ec;
+  color: #c62828;
+}
+.task-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  margin-top: 2px;
+}
+.delete-btn, .restore-btn {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  color: #888;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.delete-btn:hover { background: #eee; color: #c62828; border-color: #c62828; }
+.restore-btn { border-color: #4caf50; color: #4caf50; }
+.restore-btn:hover { background: #e8f5e9; }
+.task:not(.deleted) .restore-btn { display: none; }
+.task.deleted .delete-btn { display: none; }
+
 /* フッター */
 .footer-note {
   margin-top: 40px;
@@ -192,6 +232,10 @@ h1 {
         <div class="task-title">モックアップURL共有 <span class="badge badge-internal">社内</span></div>
         <div class="task-detail">GitHub PagesのURLをクライアントに共有し、PC・スマホでの確認を依頼する<br>URL: https://lenis-inc.github.io/b-assistant-radilia/index.html</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -199,6 +243,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">全体構成の確認 <span class="badge badge-confirm">要確認</span></div>
         <div class="task-detail">LP形式（1ページ縦スクロール）のセクション順・内容に問題がないか確認。会社概要が別ページで良いかも再確認。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
 
@@ -208,6 +256,10 @@ h1 {
         <div class="task-title">キャッチコピー・テキスト内容の確認 <span class="badge badge-confirm">要確認</span></div>
         <div class="task-detail">メインキャッチ「ずっと未完成なことを研究し続ける」、FAQ（9項目）、利用の流れ（5ステップ）等の文言がそのままで良いか確認。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -215,6 +267,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">色味・デザイントーンの確認 <span class="badge badge-confirm">要確認</span></div>
         <div class="task-detail">現在のシンプル・クリーン路線（白＋グレー）で問題ないか。ブランドカラーの希望があるか確認。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
   </div>
@@ -235,6 +291,10 @@ h1 {
         <div class="task-title">ロゴデータ <span class="badge badge-client">クライアント</span></div>
         <div class="task-detail">ヘッダー・フッターに使用するロゴ画像を提供いただく。ヒアリングシートに「ロゴもある」との記載あり。PNG/SVG形式が望ましい。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -242,6 +302,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">講師写真 <span class="badge badge-client">クライアント</span></div>
         <div class="task-detail">柳瀨裕貴氏の写真を提供いただけるか確認。提供可の場合は高解像度の写真データをいただく。不可の場合はイラスト等で代替。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
 
@@ -251,6 +315,10 @@ h1 {
         <div class="task-title">受講料金 <span class="badge badge-client">クライアント</span></div>
         <div class="task-detail">初級・中級・上級それぞれの料金を確定いただく。現在はダミー価格を表示中。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -258,6 +326,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">カリキュラム詳細 <span class="badge badge-client">クライアント</span></div>
         <div class="task-detail">初級（全8回）・中級（全6回）・上級（全8回）の各回テーマ・内容を確定いただく。現在は「詳細カリキュラムが入ります」と表示。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
 
@@ -267,6 +339,10 @@ h1 {
         <div class="task-title">代表挨拶の文面 <span class="badge badge-client">クライアント</span></div>
         <div class="task-detail">会社概要ページ（company.html）の代表挨拶セクション。現在はダミーテキストを使用中。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -275,6 +351,10 @@ h1 {
         <div class="task-title">実績バッジの内容 <span class="badge badge-client">クライアント</span></div>
         <div class="task-detail">ヒーローセクションの実績バッジ（例:「受講企業数○○社」「継続率○○%」等）の具体的な数値・内容を確認。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -282,6 +362,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">「プランはMini〜で」の意味確認 <span class="badge badge-client">クライアント</span></div>
         <div class="task-detail">ヒアリングシートに記載があるが意味が不明。料金プランの名称か、別の意図か確認が必要。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
   </div>
@@ -302,6 +386,10 @@ h1 {
         <div class="task-title">ロゴ画像の反映 <span class="badge badge-internal">社内</span></div>
         <div class="task-detail">ヘッダー・フッターのテキスト「RADILIA」をロゴ画像に差し替え。全4ページに適用。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -309,6 +397,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">講師写真の反映 <span class="badge badge-internal">社内</span></div>
         <div class="task-detail">SVGプレースホルダーを実際の写真に差し替え。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
 
@@ -318,6 +410,10 @@ h1 {
         <div class="task-title">料金・カリキュラム・代表挨拶の反映 <span class="badge badge-internal">社内</span></div>
         <div class="task-detail">ダミーテキスト箇所を確定した情報に差し替え。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -325,6 +421,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">プライバシーポリシーの正式文面作成 <span class="badge badge-internal">社内</span></div>
         <div class="task-detail">ダミーテキストを正式なプライバシーポリシーに差し替え。個人情報の取り扱い、利用目的、第三者提供等を記載。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
   </div>
@@ -345,6 +445,10 @@ h1 {
         <div class="task-title">フォーム送信先の実装 <span class="badge badge-internal">社内</span></div>
         <div class="task-detail">お問い合わせフォームの送信先（バックエンド）を実装。選択肢: Googleフォーム連携 / Formspree / 自前API等。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -352,6 +456,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">独自ドメインの設定（必要に応じて） <span class="badge badge-confirm">要確認</span></div>
         <div class="task-detail">本番公開時に独自ドメイン（例: radilia-inc.com）を使用するか確認。使用する場合はDNS設定とGitHub Pages設定を行う。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
 
@@ -361,6 +469,10 @@ h1 {
         <div class="task-title">OGP / meta情報の設定 <span class="badge badge-internal">社内</span></div>
         <div class="task-detail">各ページのtitle、description、OGP画像を設定。SNS共有時の見え方を最適化。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -368,6 +480,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">Google Analytics等の計測タグ設置 <span class="badge badge-confirm">要確認</span></div>
         <div class="task-detail">アクセス解析を導入するか確認。導入する場合はGA4等のタグを設置。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
   </div>
@@ -388,6 +504,10 @@ h1 {
         <div class="task-title">クロスブラウザ・レスポンシブ最終確認 <span class="badge badge-internal">社内</span></div>
         <div class="task-detail">PC（Chrome / Safari / Edge）、スマホ（iOS / Android）での表示確認。</div>
       </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
+      </div>
     </div>
 
     <div class="task" data-task>
@@ -395,6 +515,10 @@ h1 {
       <div class="task-body">
         <div class="task-title">クライアント最終承認 <span class="badge badge-confirm">要確認</span></div>
         <div class="task-detail">全修正完了後、クライアントに最終確認を依頼。承認を得て納品。</div>
+      </div>
+      <div class="task-actions">
+        <button class="delete-btn" onclick="deleteTask(this)">不要</button>
+        <button class="restore-btn" onclick="restoreTask(this)">戻す</button>
       </div>
     </div>
   </div>
@@ -429,7 +553,11 @@ function saveLocalState(state) {
 function collectState() {
   var state = {};
   document.querySelectorAll('[data-task]').forEach(function(task, i) {
-    if (task.classList.contains('done')) state[i] = true;
+    if (task.classList.contains('deleted')) {
+      state[i] = 'DELETE';
+    } else if (task.classList.contains('done')) {
+      state[i] = true;
+    }
   });
   return state;
 }
@@ -437,15 +565,35 @@ function collectState() {
 // ---------- UIへの状態適用 ----------
 function applyState(state) {
   document.querySelectorAll('[data-task]').forEach(function(task, i) {
-    if (state[i]) {
-      task.classList.add('done');
-      task.querySelector('.task-checkbox').classList.add('checked');
-    } else {
+    var checkbox = task.querySelector('.task-checkbox');
+    if (state[i] === 'DELETE') {
+      task.classList.add('deleted');
       task.classList.remove('done');
-      task.querySelector('.task-checkbox').classList.remove('checked');
+      checkbox.classList.remove('checked');
+      // 不要バッジを付与（まだなければ）
+      if (!task.querySelector('.deleted-badge')) {
+        var badge = document.createElement('span');
+        badge.className = 'deleted-badge';
+        badge.textContent = '不要';
+        task.querySelector('.task-title').appendChild(badge);
+      }
+    } else if (state[i] === true) {
+      task.classList.add('done');
+      task.classList.remove('deleted');
+      checkbox.classList.add('checked');
+      removeBadge(task);
+    } else {
+      task.classList.remove('done', 'deleted');
+      checkbox.classList.remove('checked');
+      removeBadge(task);
     }
   });
   updateProgress();
+}
+
+function removeBadge(task) {
+  var badge = task.querySelector('.deleted-badge');
+  if (badge) badge.remove();
 }
 
 // ---------- GAS連携 ----------
@@ -464,6 +612,7 @@ function fetchFromGAS() {
 
 function postToGAS(taskIndex, done) {
   if (!GAS_URL) return;
+  // done: true(完了) / false(未完了) / 'DELETE'(不要)
   fetch(GAS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain' },
@@ -474,32 +623,72 @@ function postToGAS(taskIndex, done) {
 }
 
 // ---------- UI操作 ----------
+function getTaskIndex(el) {
+  var task = el.closest('.task');
+  var tasks = Array.prototype.slice.call(document.querySelectorAll('[data-task]'));
+  return { task: task, idx: tasks.indexOf(task) };
+}
+
+function saveAndSync(idx, value) {
+  var state = collectState();
+  saveLocalState(state);
+  postToGAS(idx, value);
+  updateProgress();
+}
+
 function toggleTask(checkbox) {
-  checkbox.classList.toggle('checked');
   var task = checkbox.closest('.task');
+  // 不要状態のときはチェックボックス操作を無視
+  if (task.classList.contains('deleted')) return;
+
+  checkbox.classList.toggle('checked');
   task.classList.toggle('done');
   var isDone = task.classList.contains('done');
 
-  // タスクのインデックスを取得
-  var tasks = Array.prototype.slice.call(document.querySelectorAll('[data-task]'));
-  var idx = tasks.indexOf(task);
+  var info = getTaskIndex(checkbox);
+  saveAndSync(info.idx, isDone);
+}
 
-  // localStorage に保存
-  var state = collectState();
-  saveLocalState(state);
+function deleteTask(btn) {
+  var info = getTaskIndex(btn);
+  var task = info.task;
+  task.classList.add('deleted');
+  task.classList.remove('done');
+  task.querySelector('.task-checkbox').classList.remove('checked');
 
-  // GAS に送信
-  postToGAS(idx, isDone);
+  // 不要バッジを付与
+  if (!task.querySelector('.deleted-badge')) {
+    var badge = document.createElement('span');
+    badge.className = 'deleted-badge';
+    badge.textContent = '不要';
+    task.querySelector('.task-title').appendChild(badge);
+  }
 
-  updateProgress();
+  saveAndSync(info.idx, 'DELETE');
+}
+
+function restoreTask(btn) {
+  var info = getTaskIndex(btn);
+  var task = info.task;
+  task.classList.remove('deleted', 'done');
+  task.querySelector('.task-checkbox').classList.remove('checked');
+  removeBadge(task);
+
+  saveAndSync(info.idx, false);
 }
 
 function updateProgress() {
   var tasks = document.querySelectorAll('[data-task]');
-  var done = document.querySelectorAll('.task.done').length;
   var total = tasks.length;
-  document.getElementById('progressLabel').textContent = done + ' / ' + total;
-  document.getElementById('progressFill').style.width = (total > 0 ? (done / total * 100) : 0) + '%';
+  var deletedCount = document.querySelectorAll('.task.deleted').length;
+  var doneCount = document.querySelectorAll('.task.done').length;
+  var effective = total - deletedCount;
+  var label = doneCount + ' / ' + effective;
+  if (deletedCount > 0) {
+    label += '（' + deletedCount + '件不要）';
+  }
+  document.getElementById('progressLabel').textContent = label;
+  document.getElementById('progressFill').style.width = (effective > 0 ? (doneCount / effective * 100) : 0) + '%';
 }
 
 // ---------- 初期化 ----------
