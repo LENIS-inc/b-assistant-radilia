@@ -406,26 +406,91 @@ h1 {
 </div>
 
 <script>
+// =====================================================
+// Google Apps Script Web App URL（デプロイ後のURLを貼り付ける）
+// 空文字の場合は localStorage のみで動作（後方互換）
+// =====================================================
+var GAS_URL = 'https://script.google.com/a/macros/lenisgroup.jp/s/AKfycbyidEEnQMbTJo-kjYCiJksnhWtOZMNo87UqeJfJs3cLJXuAfmT2VACWFFd7b7OzUZd4/exec';
+
 var STORAGE_KEY = 'radilia-next-actions';
 
-function getState() {
+// ---------- localStorage ----------
+function getLocalState() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
   } catch(e) { return {}; }
 }
 
-function saveState() {
+function saveLocalState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// ---------- 状態の収集 ----------
+function collectState() {
   var state = {};
   document.querySelectorAll('[data-task]').forEach(function(task, i) {
     if (task.classList.contains('done')) state[i] = true;
   });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  return state;
 }
 
+// ---------- UIへの状態適用 ----------
+function applyState(state) {
+  document.querySelectorAll('[data-task]').forEach(function(task, i) {
+    if (state[i]) {
+      task.classList.add('done');
+      task.querySelector('.task-checkbox').classList.add('checked');
+    } else {
+      task.classList.remove('done');
+      task.querySelector('.task-checkbox').classList.remove('checked');
+    }
+  });
+  updateProgress();
+}
+
+// ---------- GAS連携 ----------
+function fetchFromGAS() {
+  if (!GAS_URL) return;
+  fetch(GAS_URL)
+    .then(function(res) { return res.json(); })
+    .then(function(state) {
+      applyState(state);
+      saveLocalState(state);
+    })
+    .catch(function(err) {
+      console.warn('GAS GET failed, using localStorage:', err);
+    });
+}
+
+function postToGAS(taskIndex, done) {
+  if (!GAS_URL) return;
+  fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ taskIndex: taskIndex, done: done })
+  }).catch(function(err) {
+    console.warn('GAS POST failed:', err);
+  });
+}
+
+// ---------- UI操作 ----------
 function toggleTask(checkbox) {
   checkbox.classList.toggle('checked');
-  checkbox.closest('.task').classList.toggle('done');
-  saveState();
+  var task = checkbox.closest('.task');
+  task.classList.toggle('done');
+  var isDone = task.classList.contains('done');
+
+  // タスクのインデックスを取得
+  var tasks = Array.prototype.slice.call(document.querySelectorAll('[data-task]'));
+  var idx = tasks.indexOf(task);
+
+  // localStorage に保存
+  var state = collectState();
+  saveLocalState(state);
+
+  // GAS に送信
+  postToGAS(idx, isDone);
+
   updateProgress();
 }
 
@@ -437,16 +502,14 @@ function updateProgress() {
   document.getElementById('progressFill').style.width = (total > 0 ? (done / total * 100) : 0) + '%';
 }
 
-// ページ読み込み時に保存済みの状態を復元
+// ---------- 初期化 ----------
 (function() {
-  var state = getState();
-  document.querySelectorAll('[data-task]').forEach(function(task, i) {
-    if (state[i]) {
-      task.classList.add('done');
-      task.querySelector('.task-checkbox').classList.add('checked');
-    }
-  });
-  updateProgress();
+  // まず localStorage から復元（即座に表示）
+  var localState = getLocalState();
+  applyState(localState);
+
+  // GAS が設定されていれば上書き取得
+  fetchFromGAS();
 })();
 </script>
 </body>
