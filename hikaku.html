@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>モックアップサイト比較レポート</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+      color: #222;
+    }
+    .subtitle {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 48px;
+    }
+
+    /* === Summary === */
+    .summary-box {
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 12px;
+      padding: 36px 40px;
+      margin-bottom: 48px;
+    }
+    .summary-box h2 {
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+      color: #ffd700;
+    }
+    .summary-box p { color: #ccc; margin-bottom: 12px; }
+    .winner-badge {
+      display: inline-block;
+      background: #ffd700;
+      color: #1a1a2e;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+
+    /* === Score Cards === */
+    .score-section { margin-bottom: 48px; }
+    .score-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ddd;
+      color: #222;
+    }
+    .score-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .score-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      position: relative;
+    }
+    .score-card.winner { border: 2px solid #ffd700; }
+    .score-card.winner::after {
+      content: 'BETTER';
+      position: absolute;
+      top: -10px;
+      right: 16px;
+      background: #ffd700;
+      color: #1a1a2e;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 10px;
+    }
+    .score-card h3 {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .score-card .score {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .score-card .score-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 12px;
+    }
+    .score-card .score-bar {
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .score-card .score-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width .5s;
+    }
+    .fill-zip { background: #6c63ff; }
+    .fill-docs { background: #00b894; }
+
+    /* === Comparison Table === */
+    .compare-section { margin-bottom: 48px; }
+    .compare-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ddd;
+      color: #222;
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .compare-table thead th {
+      background: #333;
+      color: #fff;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+    }
+    .compare-table thead th:first-child { width: 20%; }
+    .compare-table thead th:nth-child(2),
+    .compare-table thead th:nth-child(3) { width: 35%; }
+    .compare-table thead th:last-child { width: 10%; text-align: center; }
+    .compare-table tbody td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+      vertical-align: top;
+    }
+    .compare-table tbody tr:last-child td { border-bottom: none; }
+    .compare-table tbody tr:hover { background: #fafafa; }
+    .judge-zip {
+      color: #6c63ff;
+      font-weight: 700;
+      text-align: center;
+    }
+    .judge-docs {
+      color: #00b894;
+      font-weight: 700;
+      text-align: center;
+    }
+    .judge-draw {
+      color: #999;
+      font-weight: 600;
+      text-align: center;
+    }
+    .cell-good { background: #f0fff4; }
+    .cell-bad { background: #fff5f5; }
+
+    /* === Detail Section === */
+    .detail-section { margin-bottom: 48px; }
+    .detail-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #ddd;
+      color: #222;
+    }
+    .detail-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .detail-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #222;
+    }
+    .detail-card p { color: #555; margin-bottom: 10px; font-size: 14px; }
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 6px;
+      margin-bottom: 8px;
+    }
+    .tag-zip { background: #ede7f6; color: #6c63ff; }
+    .tag-docs { background: #e0f2f1; color: #00b894; }
+    .tag-important { background: #fff3e0; color: #e67e22; }
+
+    /* === Conclusion === */
+    .conclusion {
+      background: #fff;
+      border-radius: 10px;
+      padding: 36px 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      margin-bottom: 48px;
+    }
+    .conclusion h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #222;
+    }
+    .conclusion ul { margin-left: 1.5em; }
+    .conclusion li { margin-bottom: 8px; font-size: 14px; color: #555; }
+    .conclusion .recommend {
+      margin-top: 20px;
+      padding: 20px;
+      background: #e8f5e9;
+      border-radius: 8px;
+      border-left: 4px solid #00b894;
+    }
+    .conclusion .recommend p { color: #2e7d32; font-weight: 600; margin: 0; }
+
+    /* === Responsive === */
+    @media (max-width: 768px) {
+      .score-cards { grid-template-columns: 1fr; }
+      .compare-table { font-size: 13px; }
+      .compare-table thead th,
+      .compare-table tbody td { padding: 10px 12px; }
+      .summary-box { padding: 24px 20px; }
+      h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Radilia HP - モックアップ比較レポート</h1>
+    <p class="subtitle">ZIP版（モックアップサイト/）vs 現行docs版（docs/）- 2026/02/17作成</p>
+
+    <!-- ===== Summary ===== -->
+    <div class="summary-box">
+      <h2>結論サマリー</h2>
+      <p>全4ファイル（index.html / company.html / contact.html / privacy.html）を比較分析した結果、<strong>現行docs版が総合的に優れています</strong>。最大の理由は、クライアント要件に基づくお問い合わせフォームのLP内埋め込みが実装されており、UX・CVR（コンバージョン率）の観点で優位であるためです。</p>
+      <span class="winner-badge">総合判定: 現行 docs 版が優秀</span>
+    </div>
+
+    <!-- ===== Score Overview ===== -->
+    <div class="score-section">
+      <h2>総合スコア比較</h2>
+      <div class="score-cards">
+        <div class="score-card">
+          <h3>ZIP版（モックアップサイト/）</h3>
+          <div class="score" style="color:#6c63ff;">72<span style="font-size:1rem;color:#999;">/100</span></div>
+          <div class="score-label">基本構造は同等。フォーム未埋め込みが減点。</div>
+          <div class="score-bar"><div class="score-fill fill-zip" style="width:72%;"></div></div>
+        </div>
+        <div class="score-card winner">
+          <h3>現行docs版（docs/）</h3>
+          <div class="score" style="color:#00b894;">88<span style="font-size:1rem;color:#999;">/100</span></div>
+          <div class="score-label">LP内フォーム・ナビ最適化で高評価。</div>
+          <div class="score-bar"><div class="score-fill fill-docs" style="width:88%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Page-by-Page Comparison ===== -->
+    <div class="compare-section">
+      <h2>ページ別 詳細比較</h2>
+
+      <!-- index.html -->
+      <h3 style="margin: 24px 0 12px; font-size:1.1rem; color:#444;">index.html（TOPページ）</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>比較項目</th>
+            <th>ZIP版（モックアップサイト）</th>
+            <th>docs版（現行）</th>
+            <th>判定</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>お問い合わせフォーム</strong></td>
+            <td class="cell-bad">なし（contact.htmlへリンクのみ）</td>
+            <td class="cell-good">LP内に埋め込み済み（id="contact"）<br>フォーム項目・PP同意チェック完備</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>ヘッダーナビ</strong></td>
+            <td>会社概要 / お問い合わせ<br>+ お問い合わせボタン</td>
+            <td class="cell-good">TOP / 会社概要<br>（フォームはLP内なのでボタン不要）</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>固定CVボタン</strong></td>
+            <td>contact.htmlへリンク（別ページ遷移）</td>
+            <td class="cell-good">#contactへスムーススクロール（ページ内）</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>CTAボタンのリンク先</strong></td>
+            <td>すべてcontact.html（ページ離脱）</td>
+            <td class="cell-good">すべて#contact（ページ内遷移）</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>SPナビ</strong></td>
+            <td>トップ / 会社概要 / お問い合わせ</td>
+            <td class="cell-good">TOP / 会社概要 / お問い合わせ / プライバシーポリシー（4項目）</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>コンテンツ（セクション構成）</strong></td>
+            <td>ヒーロー〜FAQ＋CTA（同一）</td>
+            <td>ヒーロー〜FAQ＋フォーム（同一＋フォーム追加）</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>CSS（デザイン）</strong></td>
+            <td>共通スタイル（同一）</td>
+            <td>共通スタイル＋フォームCSS追加</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+          <tr>
+            <td><strong>ファイルサイズ</strong></td>
+            <td>約1,229行（軽量）</td>
+            <td>約1,367行（フォーム分増加）</td>
+            <td class="judge-zip">ZIP</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- company.html -->
+      <h3 style="margin: 32px 0 12px; font-size:1.1rem; color:#444;">company.html（会社概要）</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>比較項目</th>
+            <th>ZIP版（モックアップサイト）</th>
+            <th>docs版（現行）</th>
+            <th>判定</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ヘッダーナビ</strong></td>
+            <td>会社概要 / お問い合わせ + ボタン</td>
+            <td>TOP / 会社概要（ナビにTOPリンクあり）</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+          <tr>
+            <td><strong>固定CVボタン</strong></td>
+            <td>contact.htmlへリンク</td>
+            <td class="cell-good">index.html#contactへリンク（LP内フォーム）</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>SPナビ</strong></td>
+            <td>トップ / 会社概要 / お問い合わせ（contact.html）</td>
+            <td>TOP / 会社概要 / お問い合わせ（index.html#contact）</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+          <tr>
+            <td><strong>コンテンツ</strong></td>
+            <td>会社情報テーブル / 代表挨拶 / アクセスマップ</td>
+            <td>会社情報テーブル / 代表挨拶 / アクセスマップ（完全同一）</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- contact.html -->
+      <h3 style="margin: 32px 0 12px; font-size:1.1rem; color:#444;">contact.html（お問い合わせ）</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>比較項目</th>
+            <th>ZIP版（モックアップサイト）</th>
+            <th>docs版（現行）</th>
+            <th>判定</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>位置づけ</strong></td>
+            <td>メインの問い合わせ先</td>
+            <td class="cell-good">予備ページ（メインはLP内埋め込み）</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>フォーム内容</strong></td>
+            <td>完全同一（会社名/名前/フリガナ/TEL/コース/メール/確認/内容/PP同意）</td>
+            <td>完全同一</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+          <tr>
+            <td><strong>ナビゲーション</strong></td>
+            <td>会社概要 / お問い合わせ + ボタン</td>
+            <td>TOP / 会社概要（フォームLP内なのでボタン不要）</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+          <tr>
+            <td><strong>固定CV</strong></td>
+            <td>ページトップ（index.html#top）</td>
+            <td>ページトップ（index.html#top）（同一）</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- privacy.html -->
+      <h3 style="margin: 32px 0 12px; font-size:1.1rem; color:#444;">privacy.html（プライバシーポリシー）</h3>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>比較項目</th>
+            <th>ZIP版（モックアップサイト）</th>
+            <th>docs版（現行）</th>
+            <th>判定</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ナビゲーション</strong></td>
+            <td>会社概要 / お問い合わせ + ボタン</td>
+            <td>TOP / 会社概要</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+          <tr>
+            <td><strong>固定CV</strong></td>
+            <td>contact.htmlへリンク</td>
+            <td class="cell-good">index.html#contactへリンク</td>
+            <td class="judge-docs">docs</td>
+          </tr>
+          <tr>
+            <td><strong>コンテンツ</strong></td>
+            <td>ダミーテキスト（h2 x 4 + 本文）</td>
+            <td>ダミーテキスト（h2 x 4 + 本文）（完全同一）</td>
+            <td class="judge-draw">引分</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ===== Key Differences Detail ===== -->
+    <div class="detail-section">
+      <h2>重要な差分ポイント（詳細解説）</h2>
+
+      <div class="detail-card">
+        <h3>1. お問い合わせフォームのLP内埋め込み</h3>
+        <span class="tag tag-important">最重要</span>
+        <span class="tag tag-docs">docs版のみ実装</span>
+        <p><strong>docs版</strong>はindex.htmlのFAQセクションの下にお問い合わせフォーム（id="contact"）を埋め込み済み。フォーム項目（会社名/名前/フリガナ/TEL/受講コース/メール/メール確認/内容/PP同意）、必須/任意バッジ、送信ボタンまで完備。</p>
+        <p><strong>ZIP版</strong>はCTAボタンの下で終了しており、フォームは別ページ（contact.html）へのリンクのみ。</p>
+        <p style="color:#2e7d32; font-weight:600;">影響: LP内フォームはページ離脱を防ぎ、CVR向上に直結。CLAUDE.mdの要件（「セクション⑩としてLP内に埋め込み」）にもdocs版が合致。</p>
+      </div>
+
+      <div class="detail-card">
+        <h3>2. ナビゲーション設計の違い</h3>
+        <span class="tag tag-zip">ZIP版: 会社概要 + お問い合わせ</span>
+        <span class="tag tag-docs">docs版: TOP + 会社概要</span>
+        <p><strong>docs版</strong>はお問い合わせがLP内に埋め込まれているため、ナビにTOPリンクを配置。ユーザーは「TOP」でページ先頭に戻り、スクロールで各セクション+フォームにアクセスできる設計。</p>
+        <p><strong>ZIP版</strong>はフォームが別ページのため、ナビに「お問い合わせ」リンクとヘッダー右上に「お問い合わせ」ボタンを配置。</p>
+        <p style="color:#555;">どちらも設計意図に整合しているが、LP一体型のdocs版の方がユーザー体験として自然。</p>
+      </div>
+
+      <div class="detail-card">
+        <h3>3. 固定CVボタン・CTAのリンク先</h3>
+        <span class="tag tag-docs">docs版が優位</span>
+        <p><strong>docs版</strong>: 画面右端の固定CVボタンおよびすべてのCTAボタンが「#contact」（ページ内アンカー）にリンク。ユーザーはページを離れることなくフォームにスムーススクロールで到達。</p>
+        <p><strong>ZIP版</strong>: すべてcontact.htmlへのリンク。ページ遷移が発生し、LP内の情報から離脱するリスクがある。</p>
+      </div>
+
+      <div class="detail-card">
+        <h3>4. SPナビの充実度</h3>
+        <span class="tag tag-docs">docs版がやや優位</span>
+        <p><strong>docs版</strong>のSPナビ（index.html）には4項目：TOP / 会社概要 / お問い合わせ / プライバシーポリシー。</p>
+        <p><strong>ZIP版</strong>のSPナビ（index.html）は3項目：トップ / 会社概要 / お問い合わせ。</p>
+        <p>docs版はプライバシーポリシーへの導線もあり、フッターまでスクロールしなくてもアクセス可能。</p>
+      </div>
+
+      <div class="detail-card">
+        <h3>5. CSSの完備度</h3>
+        <span class="tag tag-docs">docs版がより完備</span>
+        <p><strong>docs版</strong>のindex.htmlにはフォーム関連CSS（.contact-lead, .contact-form, .form-group, .tag-required, .tag-optional, .form-agree, .form-submit等）が含まれており、フォームのデザインが統一的。</p>
+        <p><strong>ZIP版</strong>のindex.htmlにはフォームCSSが不要なため含まれていない。その分ファイルサイズは軽量（約138行の差）。</p>
+      </div>
+    </div>
+
+    <!-- ===== Identical Points ===== -->
+    <div class="detail-section">
+      <h2>共通点（同一の部分）</h2>
+      <div class="detail-card">
+        <p>以下の要素は両バージョンで完全に同一です：</p>
+        <ul style="margin-left:1.5em; margin-top:12px; font-size:14px; color:#555;">
+          <li>基本デザイン（フォント、カラー、余白、max-width等）</li>
+          <li>ヒーローセクション（キャッチコピー、SVGイラスト、バッジ）</li>
+          <li>AI&DXオンライン講座とは？（テキスト、SVG構造図）</li>
+          <li>問題提起・解決提示セクション</li>
+          <li>講座の特徴 3つ（交互レイアウト、各SVGイラスト）</li>
+          <li>中間CTA</li>
+          <li>カリキュラム（3段階カード + アコーディオン）</li>
+          <li>講師紹介（プレースホルダー＋紹介文）</li>
+          <li>受講料金（3カラムカード）</li>
+          <li>ご利用の流れ（5ステップ＋注意事項）</li>
+          <li>FAQ（9項目アコーディオン）</li>
+          <li>フッター（会社情報）</li>
+          <li>company.html（会社概要テーブル、代表挨拶、Googleマップ）</li>
+          <li>contact.html（フォーム項目・デザイン）</li>
+          <li>privacy.html（ダミーテキスト）</li>
+          <li>レスポンシブ対応（768pxブレークポイント）</li>
+          <li>JavaScriptアコーディオン処理</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== Conclusion ===== -->
+    <div class="conclusion">
+      <h2>総合評価・推奨</h2>
+      <p style="color:#555; margin-bottom:16px;">両バージョンの基本的なデザイン・コンテンツ品質は同等です。違いは主に<strong>お問い合わせフォームの配置</strong>と<strong>それに伴うナビゲーション設計</strong>の2点に集約されます。</p>
+
+      <table class="compare-table" style="margin-bottom:20px;">
+        <thead>
+          <tr>
+            <th>評価軸</th>
+            <th>ZIP版</th>
+            <th>docs版</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>要件適合性</strong></td>
+            <td>フォームが別ページのみ<br>（要件: LP内セクション⑩に不適合）</td>
+            <td class="cell-good">LP内埋め込み＋別ページも残存<br>（要件に完全適合）</td>
+          </tr>
+          <tr>
+            <td><strong>UX / CVR</strong></td>
+            <td>ページ遷移が発生<br>（離脱リスクあり）</td>
+            <td class="cell-good">ページ内遷移<br>（離脱を最小化）</td>
+          </tr>
+          <tr>
+            <td><strong>ナビ設計</strong></td>
+            <td>問い合わせ導線は明確だが<br>TOPリンクがない</td>
+            <td class="cell-good">TOP + LP内フォームで<br>自然な導線</td>
+          </tr>
+          <tr>
+            <td><strong>コード軽量性</strong></td>
+            <td class="cell-good">index.htmlが約138行少ない</td>
+            <td>フォームCSS/HTML分やや重い</td>
+          </tr>
+          <tr>
+            <td><strong>保守性</strong></td>
+            <td>フォーム修正はcontact.htmlのみ</td>
+            <td>index.html内フォーム + contact.html<br>（2箇所の管理が必要）</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="recommend">
+        <p>推奨: 現行docs版を採用し、引き続きこのバージョンをベースに開発を進めることを推奨します。<br>ZIP版は初期モックアップとして参考に留め、docs版の改善に注力するのが最善です。</p>
+      </div>
+    </div>
+
+    <p style="text-align:center; color:#aaa; font-size:12px; padding-bottom:24px;">Generated: 2026-02-17 | Radilia HP Comparison Report</p>
+  </div>
+</body>
+</html>
